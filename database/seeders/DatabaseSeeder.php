@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         Company::factory(10)->create();
         Job::factory(20)->create();
         Post::factory(5)->create();
-        Testimonial::factory(1)->create();
+    
 
         $categories = [
             'Healthcare',
