@@ -144,7 +144,7 @@
     </div>
 
     @include('frontend/partials.category')
-    @include('frontend/partials.testimonial')
+
 
     <div class="site-blocks-cover overlay inner-page" style="background-image: url('external/images/hero_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">
       <div class="container">
