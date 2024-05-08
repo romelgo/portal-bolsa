@@ -140,7 +140,8 @@
             <p><strong>Dirección:</strong> {{$job->address}}</p>
             <p><strong>Tipo de empleo:</strong> {{  Str::ucfirst($job->type)}}</p>
             <p><strong>Cargo:</strong> {{  Str::ucfirst($job->position)}}</p>
-
+            <p><strong>Trabajo publicado:</strong> {{$job->created_at->diffForHumans()}}</p>
+            <p><strong>Última fecha para la postulación:</strong>  {{ date('F d, Y', strtotime($job->last_date)) }}</p>
 
             <p><a href="{{route('company.index',[$job->company->id,$job->company->slug])}}" class="btn btn-info" style="width: 100%;">Visitar la página de la empresa</a></p>
               <!--  -->

@@ -26,8 +26,8 @@ class JobController extends Controller
     public function index()
     {
         $jobs = Job::latest()->limit(15)->where('status', 1)->get();
-      
-       
+
+
         $companies = Company::inRandomOrder()->take(12)->get();
 
         // $companies = Company::get()->random(12);
@@ -93,7 +93,7 @@ class JobController extends Controller
         $type = $request->get('type');
         $category = $request->get('category_id');
         $address = $request->get('address');
-        
+
         if($title || $type || $category || $address){
             $jobs = Job::where('title', 'LIKE', '%'.$title.'%')
             ->orWhere('type', $type)
@@ -103,7 +103,7 @@ class JobController extends Controller
 
             return view('frontend.jobs.alljobs', compact('jobs'));
         }else{
-    
+
             $jobs = Job::latest()->paginate(25);
             return view('frontend.jobs.alljobs', compact('jobs'));
 
@@ -113,7 +113,7 @@ class JobController extends Controller
 
     }
 
-    
+
     /**
      * Display the specified resource.
      */
@@ -124,40 +124,7 @@ class JobController extends Controller
         return view('frontend.jobs.show', compact('job', 'jobRecommendation'));
     }
 
-    public function jobRecommendation ($job){
-        $data = [];
-
-       $jobBasedOnCategory = Job::latest()
-                            ->where('category_id', $job->category_id)
-                            ->whereDate('last_date', '>', date('y-m-d'))
-                            ->where('id', '!=', $job->id)
-                            ->where('status', 1)
-                            ->limit(5)
-                            ->get();
-
-        array_push($data, $jobBasedOnCategory);
-
-       $jobBasedOnCompany = Job::latest()
-                            ->where('company_id', $job->company_id)
-                            ->whereDate('last_date', '>', date('y-m-d'))
-                            ->where('id', '!=', $job->id)
-                            ->where('status', 1)
-                            ->limit(5)
-                            ->get();
-        array_push($data, $jobBasedOnCompany);
-        $jobBasedOnPosition = Job::latest()
-                            ->where('position', 'LIKE', '%'.$job->position.'%')
-                            ->where('status', 1)
-                            ->limit(5);
-                            
-
-        array_push($data, $jobBasedOnCompany, $jobBasedOnCategory, $jobBasedOnPosition);
-
-        $collection = collect($data);
-        $unique = $collection->unique('id');
-        $jobRecommendation = $unique->values()->first();
-        return $jobRecommendation;
-    }
+    
 
 
     /**
@@ -182,7 +149,7 @@ class JobController extends Controller
     {
         $job = Job::findOrFail($id);
         $job->update($request->all());
-                
+
         return redirect()->back()->with('success', 'Job updated Successfully.');
     }
 
@@ -211,17 +178,17 @@ class JobController extends Controller
 
 
 
-    // Job applicant method 
+    // Job applicant method
     public function applicant(){
         $applicants = Job::has('users')->where('user_id', auth()->user()->id)->get();
         return view('frontend.jobs.applicants', compact('applicants'));
 
     }
 
-    // Search Jobs in 
+    // Search Jobs in
     public function searchJobs(Request $request){
 
-       
+
         $keyword = $request->get('keyword');
         $users = Job::where('title','like','%'.$keyword.'%')
                 ->orWhere('position','like','%'.$keyword.'%')
@@ -231,7 +198,7 @@ class JobController extends Controller
 
     }
 
-    // Job active/deactive 
+    // Job active/deactive
     public function jobToggle($id){
         $jobtoggle = Job::find($id);
         $jobtoggle->status = !$jobtoggle->status;
@@ -240,13 +207,13 @@ class JobController extends Controller
         return redirect('/jobs/myjobs')->with('success', 'Status Updated Successfully!');
     }
 
-    // Job Deleted 
+    // Job Deleted
     public function deleteJob(Request $request, string $id){
         $jobDel = Job::find($id);
         $jobDel->delete();
         return redirect('/jobs/create')->with('success', 'Job Deleted Successfully!');
     }
-    
+
     public function myApplications() {
         // Obtener todas las postulaciones del usuario actual
         $jobs = Auth::user()->jobs;
