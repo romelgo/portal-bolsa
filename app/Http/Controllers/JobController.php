@@ -124,7 +124,49 @@ class JobController extends Controller
         return view('frontend.jobs.show', compact('job', 'jobRecommendation'));
     }
 
-    
+    public function jobRecommendation($job)
+{
+    $data = [];
+
+    $jobBasedOnCategory = Job::latest()
+        ->where('category_id', $job->category_id)
+        ->whereDate('last_date', '>', date('Y-m-d')) // Cambiado a 'Y-m-d'
+        ->where('id', '!=', $job->id)
+        ->where('status', 1)
+        ->limit(5)
+        ->get();
+
+    array_push($data, $jobBasedOnCategory);
+
+    $jobBasedOnCompany = Job::latest()
+        ->where('company_id', $job->company_id)
+        ->whereDate('last_date', '>', date('Y-m-d')) // Cambiado a 'Y-m-d'
+        ->where('id', '!=', $job->id)
+        ->where('status', 1)
+        ->limit(5)
+        ->get();
+
+    array_push($data, $jobBasedOnCompany);
+
+    $jobBasedOnPosition = Job::latest()
+        ->where('position', 'LIKE', '%' . $job->position . '%')
+        ->where('status', 1)
+        ->limit(5)
+        ->get();
+
+    array_push($data, $jobBasedOnPosition);
+
+    // Convertir los datos en una colección
+    $collection = collect($data);
+    // Eliminar elementos duplicados por ID
+    $unique = $collection->unique('id');
+    // Obtener la primera colección única
+    $jobRecommendation = $unique->flatten()->take(5); // Corregido para que funcione con la colección de trabajos
+
+    return $jobRecommendation;
+}
+
+
 
 
     /**
