@@ -141,9 +141,7 @@
             <p><strong>Dirección:</strong> <?php echo e($job->address); ?></p>
             <p><strong>Tipo de empleo:</strong> <?php echo e(Str::ucfirst($job->type)); ?></p>
             <p><strong>Cargo:</strong> <?php echo e(Str::ucfirst($job->position)); ?></p>
-            <p><strong>Trabajo publicado:</strong> <?php echo e($job->created_at->diffForHumans()); ?></p>
-            <p><strong>Última fecha para la postulación:</strong>  <?php echo e(strftime('%d de %B de %Y', strtotime($job->last_date))); ?></p>
-                
+
 
             <p><a href="<?php echo e(route('company.index',[$job->company->id,$job->company->slug])); ?>" class="btn btn-info" style="width: 100%;">Visitar la página de la empresa</a></p>
               <!--  -->
