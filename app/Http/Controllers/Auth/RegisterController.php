@@ -78,7 +78,7 @@ class RegisterController extends Controller
             'user_id'=>$user->id,
             'gender'=> request('gender'),
             'dob'=> request('dob'),
-
+            'address' => request('address')
         ]);
 
         return $user;
